@@ -1,7 +1,47 @@
+'use client'
 
+import { useEffect } from "react";
+import {gsap} from "gsap";
+import {ScrollTrigger} from 'gsap/dist/ScrollTrigger';
 import styles from "./page.module.css";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Home() {
+  useEffect(() => {
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: `.${styles.wrapper}`,
+        start: 'top top',
+        end: '+=150%',
+        pin: true,
+        scrub: true,
+        markers: false,
+      },
+    });
+
+    timeline 
+      .to('img', {
+        scale: 2,
+        z: 350,
+        transformOrigin: 'center center',
+        ease: 'power1.inOut',
+      })
+      .to(
+        `.${styles.hero}`,
+         {
+          scale: 1.1,
+          transformOrigin: 'center center',
+          ease: 'power1.inOut',
+         },
+         '<'
+      );
+      return() =>{ 
+        if (timeline.scrollTrigger) timeline.scrollTrigger.kill();
+      };
+    }, []);
+
+
   return (
     <main className={styles.main}>
       <div className={styles.wrapper}>
